@@ -9,14 +9,14 @@
 import Foundation
 
 
-    //нам более не нужен данный файл, потому что вместо него мы используем core data. но я его сохраняю, чтобы он был и напоминал, как это могло работать через создание отдельного класса и использовании codable. 
+    //нам более не нужен данный файл, потому что вместо него мы используем core data. но я его сохраняю, чтобы он был и напоминал, как это могло работать через создание отдельного класса и использовании codable.
 
-//class Item: Codable {
-//    var title: String = ""
-//    var done: Bool = false
+class Item: Codable {
+    var title: String = ""
+    var done: Bool = false
 
-//    init(a: String, b: Bool) {
-//        title = a
-//        done = b
-//    }
-//}
+    init(a: String, b: Bool) {
+        title = a
+        done = b
+    }
+}
