@@ -144,7 +144,7 @@ class TodoListViewController: UITableViewController {
             do {
                 itemArray = try decoder.decode([Item].self, from: data)
             } catch {
-                print("Error decoding ItemArray, \(error)")
+                print("Error decoding ItemArray, 1 \(error)")
             }
         }
     }
