@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
 
@@ -14,8 +15,8 @@ class TodoListViewController: UITableViewController {
 
     var itemArray = [Item]() //    var itemArray2: [Item] = []
 
-    //    let defaults = UserDefaults.standard
-
+    // тут мы как бы обратились к appDelegate, но нам надо было обратиться не к классу в целом, а к конкретному объекту, поэтому и пришлось прописать вот так длинно
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,19 +25,19 @@ class TodoListViewController: UITableViewController {
         //            itemArray = items
         //        }
 
-        let newItem = Item()
-        newItem.title = "Find Mike"
-        itemArray.append(newItem)
+//        let newItem = Item()
+//        newItem.title = "Find Mike"
+//        itemArray.append(newItem)
+//
+//        let newItem2 = Item()
+//        newItem2.title = "Find Eggos"
+//        itemArray.append(newItem2)
+//
+//        let newItem3 = Item()
+//        newItem3.title = "Kill Demogorgon"
+//        itemArray.append(newItem3)
 
-        let newItem2 = Item()
-        newItem2.title = "Find Eggos"
-        itemArray.append(newItem2)
-
-        let newItem3 = Item()
-        newItem3.title = "Kill Demogorgon"
-        itemArray.append(newItem3)
-
-        loadData()
+//        loadData()
 
     }
 
@@ -57,12 +58,6 @@ class TodoListViewController: UITableViewController {
 
         cell.accessoryType = item.done == true ? .checkmark : .none
 
-        //        if item.done == true {
-        //            cell.accessoryType = .checkmark
-        //        } else {
-        //            cell.accessoryType = .none
-        //        }
-
         return cell
     }
 
@@ -70,15 +65,7 @@ class TodoListViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        //        print(itemArray[indexPath.row])
-
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-        //        вместо всего этого можно использовать одну строку выше.
-        //        if itemArray[indexPath.row].done == true {
-        //            itemArray[indexPath.row].done = false
-        //        } else {
-        //            itemArray[indexPath.row].done = true
-        //        }
 
         saveItems()
 
@@ -96,11 +83,11 @@ class TodoListViewController: UITableViewController {
 
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what happens when user presses the Add Item button on our Alert
-            print("Success!")
-
             //            if let safeText = textField.text {
 
-            let newItem = Item()
+            // что такое context? за что он отвечает вообще?
+            let newItem = Item(context: self.context)
+
             newItem.title = textField.text!
 
             self.itemArray.append(newItem)
@@ -124,13 +111,10 @@ class TodoListViewController: UITableViewController {
     //MARK: MODEL MANIPULATION METHOD
 
     func saveItems() {
-        let encoder = PropertyListEncoder()
-
         do {
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding item array \(error)")
+            print("Error saving context \(error)")
         }
 
         tableView.reloadData()
@@ -138,16 +122,16 @@ class TodoListViewController: UITableViewController {
 
 
     //почему try?. Почему форс анвраппинг? что есть дата? почему decode именно с такими параметрами?
-    func loadData() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-                itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("Error decoding ItemArray, \(error)")
-            }
-        }
-    }
+//    func loadData() {
+//        if let data = try? Data(contentsOf: dataFilePath!) {
+//            let decoder = PropertyListDecoder()
+//            do {
+//                itemArray = try decoder.decode([Item].self, from: data)
+//            } catch {
+//                print("Error decoding ItemArray, \(error)")
+//            }
+//        }
+//    }
 }
 
 
