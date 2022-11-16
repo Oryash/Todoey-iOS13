@@ -18,6 +18,10 @@ class TodoListViewController: UITableViewController {
     // тут мы как бы обратились к appDelegate, но нам надо было обратиться не к классу в целом, а к конкретному объекту, поэтому и пришлось прописать вот так длинно
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
+
+
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
